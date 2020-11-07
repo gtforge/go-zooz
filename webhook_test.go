@@ -18,12 +18,9 @@ import (
 )
 
 func TestDecodeWebhookRequest_Payment(t *testing.T) {
-	const eventType = "payment.payment.create"
-	const privateKey = "test-private-key"
-
 	expected := zooz.PaymentCallback{
 		CallbackCommon: zooz.CallbackCommon{
-			EventType:      eventType,
+			EventType:      "payment.payment.create",
 			XPaymentsOSEnv: "live",
 			XZoozRequestID: "test-x-zooz-request-id",
 
@@ -44,10 +41,7 @@ func TestDecodeWebhookRequest_Payment(t *testing.T) {
 		},
 	}
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, expected.AppID, appID)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
 	body :=
 		`{
@@ -65,7 +59,7 @@ func TestDecodeWebhookRequest_Payment(t *testing.T) {
 	}
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", eventType)
+	r.Header.Set("event-type", expected.EventType)
 	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
 	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
@@ -76,12 +70,9 @@ func TestDecodeWebhookRequest_Payment(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_Authorization(t *testing.T) {
-	const eventType = "payment.authorization.create"
-	const privateKey = "test-private-key"
-
 	expected := zooz.AuthorizationCallback{
 		CallbackCommon: zooz.CallbackCommon{
-			EventType:      eventType,
+			EventType:      "payment.authorization.create",
 			XPaymentsOSEnv: "live",
 			XZoozRequestID: "test-x-zooz-request-id",
 
@@ -108,10 +99,7 @@ func TestDecodeWebhookRequest_Authorization(t *testing.T) {
 		},
 	}
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, expected.AppID, appID)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
 	body :=
 		`{
@@ -137,7 +125,7 @@ func TestDecodeWebhookRequest_Authorization(t *testing.T) {
 	}
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", eventType)
+	r.Header.Set("event-type", expected.EventType)
 	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
 	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
@@ -148,12 +136,9 @@ func TestDecodeWebhookRequest_Authorization(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_Capture(t *testing.T) {
-	const eventType = "payment.capture.update"
-	const privateKey = "test-private-key"
-
 	expected := zooz.CaptureCallback{
 		CallbackCommon: zooz.CallbackCommon{
-			EventType:      eventType,
+			EventType:      "payment.capture.update",
 			XPaymentsOSEnv: "live",
 			XZoozRequestID: "test-x-zooz-request-id",
 
@@ -182,10 +167,7 @@ func TestDecodeWebhookRequest_Capture(t *testing.T) {
 		},
 	}
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, expected.AppID, appID)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
 	body :=
 		`{
@@ -211,7 +193,7 @@ func TestDecodeWebhookRequest_Capture(t *testing.T) {
 	}
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", eventType)
+	r.Header.Set("event-type", expected.EventType)
 	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
 	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
@@ -222,12 +204,9 @@ func TestDecodeWebhookRequest_Capture(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_Void(t *testing.T) {
-	const eventType = "payment.void.create"
-	const privateKey = "test-private-key"
-
 	expected := zooz.VoidCallback{
 		CallbackCommon: zooz.CallbackCommon{
-			EventType:      eventType,
+			EventType:      "payment.void.create",
 			XPaymentsOSEnv: "live",
 			XZoozRequestID: "test-x-zooz-request-id",
 
@@ -252,10 +231,7 @@ func TestDecodeWebhookRequest_Void(t *testing.T) {
 		},
 	}
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, expected.AppID, appID)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
 	body :=
 		`{
@@ -279,7 +255,7 @@ func TestDecodeWebhookRequest_Void(t *testing.T) {
 	}
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", eventType)
+	r.Header.Set("event-type", expected.EventType)
 	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
 	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
@@ -290,20 +266,16 @@ func TestDecodeWebhookRequest_Void(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_Refund(t *testing.T) {
-	const eventType = "payment.refund.update"
-	const appID = "test-app-id"
-	const privateKey = "test-private-key"
-
 	expected := zooz.RefundCallback{
 		CallbackCommon: zooz.CallbackCommon{
-			EventType:      eventType,
+			EventType:      "payment.refund.update",
 			XPaymentsOSEnv: "live",
 			XZoozRequestID: "test-x-zooz-request-id",
 
 			ID:        "test-webhook-id",
 			Created:   time.Date(2018, 10, 03, 05, 22, 45, 610000000, time.UTC), // "2018-10-03T05:22:45.610Z"
 			AccountID: "test-account-id",
-			AppID:     appID,
+			AppID:     "test-app-id",
 			PaymentID: "test-payment-id",
 		},
 		Data: zooz.Refund{
@@ -327,10 +299,7 @@ func TestDecodeWebhookRequest_Refund(t *testing.T) {
 		},
 	}
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
 	body :=
 		`{
@@ -358,7 +327,7 @@ func TestDecodeWebhookRequest_Refund(t *testing.T) {
 	}
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", eventType)
+	r.Header.Set("event-type", expected.EventType)
 	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
 	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
@@ -369,10 +338,7 @@ func TestDecodeWebhookRequest_Refund(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body := `{
 			"id": "test-webhook-id",
@@ -382,8 +348,6 @@ func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
 `
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
 	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("x-payments-os-env", "test")
-	r.Header.Set("x-zooz-request-id", "test-zooz-request-id")
 	r.Header.Set("signature", "sig1=doesntmatter")
 
 	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
@@ -393,10 +357,7 @@ func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
 }
 
 func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body :=
 		`{
@@ -418,8 +379,6 @@ func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T)
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
 	r.Header.Set("event-type", "payment.XXXX.create")
-	r.Header.Set("x-payments-os-env", "test")
-	r.Header.Set("x-zooz-request-id", "test-zooz-request-id")
 	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
 
 	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
@@ -429,17 +388,14 @@ func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T)
 }
 
 func TestDecodeWebhookRequest_BadRequestError_UnknownBusinessUnit(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return nil, nil // pretend we don't know this business unit
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")} // we don't know 'UNKNOWN-app-id'
 
 	body :=
 		`{
 	"id": "test-webhook-id",
     "created": "2018-10-03T05:14:17.196Z",
     "account_id": "test-account-id",
-    "app_id": "test-app-id",
+    "app_id": "UNKNOWN-app-id",
     "payment_id": "test-payment-id",
 	"data": {
 		"id": "test-transaction-id",
@@ -454,21 +410,16 @@ func TestDecodeWebhookRequest_BadRequestError_UnknownBusinessUnit(t *testing.T) 
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
 	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("x-payments-os-env", "test")
-	r.Header.Set("x-zooz-request-id", "test-zooz-request-id")
 	r.Header.Set("signature", "sig1=doesntmatter")
 
 	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
 	require.Error(t, err)
 	require.True(t, errors.As(err, &zooz.ErrBadRequest{}))
-	require.Contains(t, err.Error(), `unknown app_id "test-app-id"`)
+	require.Contains(t, err.Error(), `unknown app_id "UNKNOWN-app-id"`)
 }
 
 func TestDecodeWebhookRequest_BadRequestError_IncorrectSignature(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body :=
 		`{
@@ -490,8 +441,6 @@ func TestDecodeWebhookRequest_BadRequestError_IncorrectSignature(t *testing.T) {
 }`
 	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
 	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("x-payments-os-env", "test")
-	r.Header.Set("x-zooz-request-id", "test-zooz-request-id")
 	r.Header.Set("signature", "sig1=iaminvalid")
 
 	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
@@ -520,10 +469,7 @@ func TestCalculateWebhookSignature_AllFields(t *testing.T) {
 		data_Currency                  = "RUB"
 	)
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, id string) ([]byte, error) {
-		require.Equal(t, appID, id)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{appID: []byte(privateKey)}
 
 	body := `{
 	"id": "` + id + `",
@@ -589,10 +535,7 @@ func TestCalculateWebhookSignature_MissingFields(t *testing.T) {
 		data_ReconciliationID          = "test-reconciliation-id"
 	)
 
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, id string) ([]byte, error) {
-		require.Equal(t, appID, id)
-		return []byte(privateKey), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{appID: []byte(privateKey)}
 
 	body := `{
 	"id": "` + id + `",
@@ -639,10 +582,7 @@ func TestCalculateWebhookSignature_MissingFields(t *testing.T) {
 }
 
 func TestCalculateWebhookSignature_NoAmount(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "test-app-id", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body := `{
 	"id": "test-id",
@@ -709,10 +649,7 @@ func TestCalculateWebhookSignature_ZeroAmount(t *testing.T) {
 
 // was validated via zooz sandbox
 func TestCalculateWebhookSignature_Payment(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "com.gojuno.gett_development", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"com.gojuno.gett_development": []byte("test-private-key")}
 
 	body := `{
 	"id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f-2020-11-06T14:33:46.150Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
@@ -736,10 +673,7 @@ func TestCalculateWebhookSignature_Payment(t *testing.T) {
 
 // was validated via zooz sandbox
 func TestCalculateWebhookSignature_Void(t *testing.T) {
-	keyProvider := zooz.PrivateKeyProviderFunc(func(_ context.Context, appID string) ([]byte, error) {
-		require.Equal(t, "com.gojuno.gett_development", appID)
-		return []byte("test-private-key"), nil
-	})
+	keyProvider := zooz.FixedPrivateKeyProvider{"com.gojuno.gett_development": []byte("test-private-key")}
 
 	body := `{
 	"id": "83bc25f0-1710-4ea7-b610-8028f4de6d63-2020-11-06T21:09:22.356Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
@@ -773,7 +707,13 @@ func signature(values []string, key string) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
-func calcRequestSignature(t *testing.T, keyProvider zooz.PrivateKeyProviderFunc, reqBody []byte, reqHeader http.Header) string {
+func calcRequestSignature(t *testing.T,
+	keyProvider interface {
+		PrivateKey(ctx context.Context, appID string) ([]byte, error)
+	},
+	reqBody []byte,
+	reqHeader http.Header,
+) string {
 	signature, err := zooz.CalculateWebhookSignature(context.Background(), reqBody, reqHeader, keyProvider)
 	require.NoError(t, err)
 	return "sig1=" + signature

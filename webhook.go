@@ -72,6 +72,12 @@ func (f PrivateKeyProviderFunc) PrivateKey(ctx context.Context, appID string) ([
 	return f(ctx, appID)
 }
 
+type FixedPrivateKeyProvider map[string][]byte
+
+func (m FixedPrivateKeyProvider) PrivateKey(_ context.Context, appID string) ([]byte, error) {
+	return m[appID], nil
+}
+
 type ErrBadRequest struct {
 	Err error
 }
