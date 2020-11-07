@@ -20,6 +20,12 @@ type Callback interface {
 	isCallback()
 }
 
+func (PaymentCallback) isCallback()       {}
+func (AuthorizationCallback) isCallback() {}
+func (CaptureCallback) isCallback()       {}
+func (VoidCallback) isCallback()          {}
+func (RefundCallback) isCallback()        {}
+
 type CallbackCommon struct {
 	EventType      string `json:"-"` // The type of resource that triggered the event. For example, "payment.authorization.create". Returned in "event-type" header.
 	XPaymentsOSEnv string `json:"-"` // PaymentsOS environment, 'live' or 'test'. Returned in "x-payments-os-env" header.
@@ -31,8 +37,6 @@ type CallbackCommon struct {
 	AppID     string    `json:"app_id"`
 	PaymentID string    `json:"payment_id"`
 }
-
-func (CallbackCommon) isCallback() {}
 
 type PaymentCallback struct {
 	CallbackCommon
