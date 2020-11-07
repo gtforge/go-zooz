@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
@@ -88,6 +87,8 @@ func (e ErrBadRequest) Unwrap() error { return e.Err }
 
 // DecodeWebhookRequest decodes PaymentsOS webhook http request into callback entity.
 // Supports webhook version >= 1.2.0
+// reqBody should be a raw webhook http request body.
+// reqHeader should be webhook http request headers.
 //
 // Will return ErrBadRequest if the error is permanent and request should not be retried.
 // Bear in mind that your webhook handler should respond with 2xx status code anyway, otherwise PaymentsOS will continue
@@ -97,27 +98,22 @@ func (e ErrBadRequest) Unwrap() error { return e.Err }
 //  * validation error (missing required fields or headers, unexpected values)
 // 	* unknown business unit (app_id)
 //  * incorrect request signature
-func DecodeWebhookRequest(ctx context.Context, r *http.Request, keyProvider privateKeyProvider) (Callback, error) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "read request body")
-	}
-
+func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, keyProvider privateKeyProvider) (Callback, error) {
 	// Validate request signature
-	signature, err := CalculateWebhookSignature(ctx, body, r.Header, keyProvider)
+	signature, err := CalculateWebhookSignature(ctx, body, header, keyProvider)
 	if err != nil {
 		return nil, errors.WithMessage(err, "calculate request signature")
 	}
-	if "sig1="+signature != r.Header.Get("signature") {
+	if "sig1="+signature != header.Get("signature") {
 		return nil, ErrBadRequest{errors.New("incorrect signature")}
 	}
 
 	// Decode request into appropriate entity type based on "event-type" header
-	eventType := r.Header.Get(headerEventType)
+	eventType := header.Get(headerEventType)
 	common := CallbackCommon{
 		EventType:      eventType,
-		XPaymentsOSEnv: r.Header.Get("x-payments-os-env"),
-		XZoozRequestID: r.Header.Get("x-zooz-request-id"),
+		XPaymentsOSEnv: header.Get("x-payments-os-env"),
+		XZoozRequestID: header.Get("x-zooz-request-id"),
 	}
 	var cbRef Callback
 	switch true {

@@ -13,7 +13,8 @@ func ExampleDecodeWebhookRequest() {
 	keyProvider := zooz.FixedPrivateKeyProvider{"app-id": []byte("my-private-key")}
 
 	_ = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		cb, err := zooz.DecodeWebhookRequest(r.Context(), r, keyProvider)
+		body, _ := ioutil.ReadAll(r.Body)
+		cb, err := zooz.DecodeWebhookRequest(r.Context(), body, r.Header, keyProvider)
 		if err != nil {
 			if errors.As(err, &zooz.ErrBadRequest{}) {
 				// Invalid request. We don't want PaymentsOS to resend it, so respond with 2xx code.

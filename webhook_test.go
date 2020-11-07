@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"net/http"
-	"net/http/httptest"
 	"strconv"
 	"strings"
 	"testing"
@@ -58,13 +57,13 @@ func TestDecodeWebhookRequest_Payment(t *testing.T) {
 		"customer_id": "` + expected.Data.CustomerID + `"
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", expected.EventType)
-	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
-	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", expected.EventType)
+	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
+	h.Set("x-zooz-request-id", expected.XZoozRequestID)
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	cb, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	cb, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.NoError(t, err)
 	require.Equal(t, expected, cb)
 }
@@ -124,13 +123,13 @@ func TestDecodeWebhookRequest_Authorization(t *testing.T) {
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", expected.EventType)
-	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
-	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", expected.EventType)
+	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
+	h.Set("x-zooz-request-id", expected.XZoozRequestID)
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	cb, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	cb, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.NoError(t, err)
 	require.Equal(t, expected, cb)
 }
@@ -192,13 +191,13 @@ func TestDecodeWebhookRequest_Capture(t *testing.T) {
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", expected.EventType)
-	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
-	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", expected.EventType)
+	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
+	h.Set("x-zooz-request-id", expected.XZoozRequestID)
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	cb, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	cb, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.NoError(t, err)
 	require.Equal(t, expected, cb)
 }
@@ -254,13 +253,13 @@ func TestDecodeWebhookRequest_Void(t *testing.T) {
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", expected.EventType)
-	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
-	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", expected.EventType)
+	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
+	h.Set("x-zooz-request-id", expected.XZoozRequestID)
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	cb, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	cb, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.NoError(t, err)
 	require.Equal(t, expected, cb)
 }
@@ -326,13 +325,13 @@ func TestDecodeWebhookRequest_Refund(t *testing.T) {
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", expected.EventType)
-	r.Header.Set("x-payments-os-env", expected.XPaymentsOSEnv)
-	r.Header.Set("x-zooz-request-id", expected.XZoozRequestID)
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", expected.EventType)
+	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
+	h.Set("x-zooz-request-id", expected.XZoozRequestID)
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	cb, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	cb, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.NoError(t, err)
 	require.Equal(t, expected, cb)
 }
@@ -346,11 +345,11 @@ func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
     		"account_id": "test-account-id",
     		"app_id": "test-app-id",
 `
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("signature", "sig1=doesntmatter")
+	h := http.Header{}
+	h.Set("event-type", "payment.void.create")
+	h.Set("signature", "sig1=doesntmatter")
 
-	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	_, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.Error(t, err)
 	require.True(t, errors.As(err, &zooz.ErrBadRequest{}))
 	require.Contains(t, err.Error(), "unmarshal request body")
@@ -377,11 +376,11 @@ func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T)
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", "payment.XXXX.create")
-	r.Header.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), r.Header))
+	h := http.Header{}
+	h.Set("event-type", "payment.XXXX.create")
+	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
 
-	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	_, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.Error(t, err)
 	require.True(t, errors.As(err, &zooz.ErrBadRequest{}))
 	require.Contains(t, err.Error(), `unsupported event type: "payment.XXXX.create"`)
@@ -408,11 +407,11 @@ func TestDecodeWebhookRequest_BadRequestError_UnknownBusinessUnit(t *testing.T) 
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("signature", "sig1=doesntmatter")
+	h := http.Header{}
+	h.Set("event-type", "payment.void.create")
+	h.Set("signature", "sig1=doesntmatter")
 
-	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	_, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.Error(t, err)
 	require.True(t, errors.As(err, &zooz.ErrBadRequest{}))
 	require.Contains(t, err.Error(), `unknown app_id "UNKNOWN-app-id"`)
@@ -439,11 +438,11 @@ func TestDecodeWebhookRequest_BadRequestError_IncorrectSignature(t *testing.T) {
   		}
 	}
 }`
-	r := httptest.NewRequest("POST", "http://nevermind", strings.NewReader(body))
-	r.Header.Set("event-type", "payment.void.create")
-	r.Header.Set("signature", "sig1=iaminvalid")
+	h := http.Header{}
+	h.Set("event-type", "payment.void.create")
+	h.Set("signature", "sig1=iaminvalid")
 
-	_, err := zooz.DecodeWebhookRequest(context.Background(), r, keyProvider)
+	_, err := zooz.DecodeWebhookRequest(context.Background(), []byte(body), h, keyProvider)
 	require.Error(t, err)
 	require.True(t, errors.As(err, &zooz.ErrBadRequest{}))
 	require.Contains(t, err.Error(), `incorrect signature`)
