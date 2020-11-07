@@ -42,21 +42,20 @@ func TestDecodeWebhookRequest_Payment(t *testing.T) {
 
 	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "` + expected.ID + `",
-    "created": "2018-10-03T04:58:35.385Z",
-    "account_id": "` + expected.AccountID + `",
-    "app_id": "` + expected.AppID + `",
-    "payment_id": "` + expected.PaymentID + `",
-	"data": {
-		"id": "` + expected.Data.ID + `",
-		"status": "` + string(expected.Data.Status) + `",
-  		"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
-		"currency":"` + expected.Data.Currency + `",
-		"customer_id": "` + expected.Data.CustomerID + `"
-	}
-}`
+	body := `{
+		"id": "` + expected.ID + `",
+		"created": "2018-10-03T04:58:35.385Z",
+		"account_id": "` + expected.AccountID + `",
+		"app_id": "` + expected.AppID + `",
+		"payment_id": "` + expected.PaymentID + `",
+		"data": {
+			"id": "` + expected.Data.ID + `",
+			"status": "` + string(expected.Data.Status) + `",
+			"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
+			"currency":"` + expected.Data.Currency + `",
+			"customer_id": "` + expected.Data.CustomerID + `"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", expected.EventType)
 	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
@@ -100,29 +99,28 @@ func TestDecodeWebhookRequest_Authorization(t *testing.T) {
 
 	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "` + expected.ID + `",
-    "created": "2018-10-03T04:58:35.385Z",
-    "account_id": "` + expected.AccountID + `",
-    "app_id": "` + expected.AppID + `",
-    "payment_id": "` + expected.PaymentID + `",
-	"data": {
-		"id": "` + expected.Data.ID + `",
-  		"result": {
-			"status": "` + expected.Data.Result.Status + `",
-    		"category": "` + expected.Data.Result.Category + `",
-    		"sub_category": "` + expected.Data.Result.SubCategory + `",
-    		"description": "` + expected.Data.Result.Description + `"
-  		},
-  		"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
-  		"reconciliation_id": "` + expected.Data.ReconciliationID + `",
-  		"provider_data": {
-    		"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
-    		"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
-  		}
-	}
-}`
+	body := `{
+		"id": "` + expected.ID + `",
+		"created": "2018-10-03T04:58:35.385Z",
+		"account_id": "` + expected.AccountID + `",
+		"app_id": "` + expected.AppID + `",
+		"payment_id": "` + expected.PaymentID + `",
+		"data": {
+			"id": "` + expected.Data.ID + `",
+			"result": {
+				"status": "` + expected.Data.Result.Status + `",
+				"category": "` + expected.Data.Result.Category + `",
+				"sub_category": "` + expected.Data.Result.SubCategory + `",
+				"description": "` + expected.Data.Result.Description + `"
+			},
+			"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
+			"reconciliation_id": "` + expected.Data.ReconciliationID + `",
+			"provider_data": {
+				"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
+				"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", expected.EventType)
 	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
@@ -168,29 +166,28 @@ func TestDecodeWebhookRequest_Capture(t *testing.T) {
 
 	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "` + expected.ID + `",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "` + expected.AccountID + `",
-    "app_id": "` + expected.AppID + `",
-    "payment_id": "` + expected.PaymentID + `",
-	"data": {
-		"id": "` + expected.Data.ID + `",
-  		"result": {
-			"status": "` + expected.Data.Result.Status + `",
-    		"category": "` + expected.Data.Result.Category + `",
-    		"sub_category": "` + expected.Data.Result.SubCategory + `",
-    		"description": "` + expected.Data.Result.Description + `"
-  		},
-  		"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
-  		"reconciliation_id": "` + expected.Data.ReconciliationID + `",
-  		"provider_data": {
-    		"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
-    		"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
-  		}
-	}
-}`
+	body := `{
+		"id": "` + expected.ID + `",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "` + expected.AccountID + `",
+		"app_id": "` + expected.AppID + `",
+		"payment_id": "` + expected.PaymentID + `",
+		"data": {
+			"id": "` + expected.Data.ID + `",
+			"result": {
+				"status": "` + expected.Data.Result.Status + `",
+				"category": "` + expected.Data.Result.Category + `",
+				"sub_category": "` + expected.Data.Result.SubCategory + `",
+				"description": "` + expected.Data.Result.Description + `"
+			},
+			"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
+			"reconciliation_id": "` + expected.Data.ReconciliationID + `",
+			"provider_data": {
+				"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
+				"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", expected.EventType)
 	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
@@ -232,27 +229,26 @@ func TestDecodeWebhookRequest_Void(t *testing.T) {
 
 	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "` + expected.ID + `",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "` + expected.AccountID + `",
-    "app_id": "` + expected.AppID + `",
-    "payment_id": "` + expected.PaymentID + `",
-	"data": {
-		"id": "` + expected.Data.ID + `",
-  		"result": {
-			"status": "` + expected.Data.Result.Status + `",
-    		"category": "` + expected.Data.Result.Category + `",
-    		"sub_category": "` + expected.Data.Result.SubCategory + `",
-    		"description": "` + expected.Data.Result.Description + `"
-  		},
-  		"provider_data": {
-    		"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
-    		"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
-  		}
-	}
-}`
+	body := `{
+		"id": "` + expected.ID + `",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "` + expected.AccountID + `",
+		"app_id": "` + expected.AppID + `",
+		"payment_id": "` + expected.PaymentID + `",
+		"data": {
+			"id": "` + expected.Data.ID + `",
+			"result": {
+				"status": "` + expected.Data.Result.Status + `",
+				"category": "` + expected.Data.Result.Category + `",
+				"sub_category": "` + expected.Data.Result.SubCategory + `",
+				"description": "` + expected.Data.Result.Description + `"
+			},
+			"provider_data": {
+				"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
+				"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", expected.EventType)
 	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
@@ -300,31 +296,30 @@ func TestDecodeWebhookRequest_Refund(t *testing.T) {
 
 	keyProvider := zooz.FixedPrivateKeyProvider{expected.AppID: []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "` + expected.ID + `",
-    "created": "2018-10-03T05:22:45.610Z",
-    "account_id": "` + expected.AccountID + `",
-    "app_id": "` + expected.AppID + `",
-    "payment_id": "` + expected.PaymentID + `",
-	"data": {
-		"id": "` + expected.Data.ID + `",
-  		"result": {
-			"status": "` + expected.Data.Result.Status + `",
-    		"category": "` + expected.Data.Result.Category + `",
-    		"sub_category": "` + expected.Data.Result.SubCategory + `",
-    		"description": "` + expected.Data.Result.Description + `"
-  		},
-  		"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
-  		"reconciliation_id": "` + expected.Data.ReconciliationID + `",
-		"capture_id": "` + expected.Data.CaptureID + `",
-		"reason": "` + expected.Data.Reason + `",
-  		"provider_data": {
-    		"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
-    		"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
-  		}
-	}
-}`
+	body := `{
+		"id": "` + expected.ID + `",
+		"created": "2018-10-03T05:22:45.610Z",
+		"account_id": "` + expected.AccountID + `",
+		"app_id": "` + expected.AppID + `",
+		"payment_id": "` + expected.PaymentID + `",
+		"data": {
+			"id": "` + expected.Data.ID + `",
+			"result": {
+				"status": "` + expected.Data.Result.Status + `",
+				"category": "` + expected.Data.Result.Category + `",
+				"sub_category": "` + expected.Data.Result.SubCategory + `",
+				"description": "` + expected.Data.Result.Description + `"
+  			},
+  			"amount": ` + strconv.FormatInt(expected.Data.Amount, 10) + `,
+			"reconciliation_id": "` + expected.Data.ReconciliationID + `",
+			"capture_id": "` + expected.Data.CaptureID + `",
+			"reason": "` + expected.Data.Reason + `",
+			"provider_data": {
+				"provider_name": "` + expected.Data.ProviderData.ProviderName + `",
+				"response_code": "` + expected.Data.ProviderData.ResponseCode + `"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", expected.EventType)
 	h.Set("x-payments-os-env", expected.XPaymentsOSEnv)
@@ -340,10 +335,10 @@ func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body := `{
-			"id": "test-webhook-id",
-    		"created": "2018-10-03T05:22:45.610Z",
-    		"account_id": "test-account-id",
-    		"app_id": "test-app-id",
+		"id": "test-webhook-id",
+		"created": "2018-10-03T05:22:45.610Z",
+		"account_id": "test-account-id",
+		"app_id": "test-app-id",
 `
 	h := http.Header{}
 	h.Set("event-type", "payment.void.create")
@@ -358,24 +353,23 @@ func TestDecodeWebhookRequest_BadRequestError_BrokenJson(t *testing.T) {
 func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "test-webhook-id",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "test-account-id",
-    "app_id": "test-app-id",
-    "payment_id": "test-payment-id",
-	"data": {
-		"id": "test-transaction-id",
-  		"result": {
-			"status": "Success"
-  		},
-  		"provider_data": {
-    		"provider_name": "test-provider-name",
-    		"response_code": "0"
-  		}
-	}
-}`
+	body := `{
+		"id": "test-webhook-id",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "test-account-id",
+		"app_id": "test-app-id",
+		"payment_id": "test-payment-id",
+		"data": {
+			"id": "test-transaction-id",
+			"result": {
+				"status": "Success"
+			},
+			"provider_data": {
+				"provider_name": "test-provider-name",
+				"response_code": "0"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.XXXX.create")
 	h.Set("signature", calcRequestSignature(t, keyProvider, []byte(body), h))
@@ -389,24 +383,23 @@ func TestDecodeWebhookRequest_BadRequestError_UnsupportedEventType(t *testing.T)
 func TestDecodeWebhookRequest_BadRequestError_UnknownBusinessUnit(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")} // we don't know 'UNKNOWN-app-id'
 
-	body :=
-		`{
-	"id": "test-webhook-id",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "test-account-id",
-    "app_id": "UNKNOWN-app-id",
-    "payment_id": "test-payment-id",
-	"data": {
-		"id": "test-transaction-id",
-  		"result": {
-			"status": "Success"
-  		},
-  		"provider_data": {
-    		"provider_name": "test-provider-name",
-    		"response_code": "0"
-  		}
-	}
-}`
+	body := `{
+		"id": "test-webhook-id",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "test-account-id",
+		"app_id": "UNKNOWN-app-id",
+		"payment_id": "test-payment-id",
+		"data": {
+			"id": "test-transaction-id",
+			"result": {
+				"status": "Success"
+			},
+			"provider_data": {
+				"provider_name": "test-provider-name",
+				"response_code": "0"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.void.create")
 	h.Set("signature", "sig1=doesntmatter")
@@ -420,24 +413,23 @@ func TestDecodeWebhookRequest_BadRequestError_UnknownBusinessUnit(t *testing.T) 
 func TestDecodeWebhookRequest_BadRequestError_IncorrectSignature(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
-	body :=
-		`{
-	"id": "test-webhook-id",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "test-account-id",
-    "app_id": "test-app-id",
-    "payment_id": "test-payment-id",
-	"data": {
-		"id": "test-transaction-id",
-  		"result": {
-			"status": "Success"
-  		},
-  		"provider_data": {
-    		"provider_name": "test-provider-name",
-    		"response_code": "0"
-  		}
-	}
-}`
+	body := `{
+		"id": "test-webhook-id",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "test-account-id",
+		"app_id": "test-app-id",
+		"payment_id": "test-payment-id",
+		"data": {
+			"id": "test-transaction-id",
+			"result": {
+				"status": "Success"
+			},
+			"provider_data": {
+				"provider_name": "test-provider-name",
+				"response_code": "0"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.void.create")
 	h.Set("signature", "sig1=iaminvalid")
@@ -471,26 +463,26 @@ func TestCalculateWebhookSignature_AllFields(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{appID: []byte(privateKey)}
 
 	body := `{
-	"id": "` + id + `",
-    "created": "` + created + `",
-    "account_id": "` + accountID + `",
-    "app_id": "` + appID + `",
-    "payment_id": "` + paymentID + `",
-	"data": {
-		"id": "` + data_ID + `",
-  		"result": {
-			"status": "` + data_Result_Status + `",
-    		"category": "` + data_Result_Category + `",
-    		"sub_category": "` + data_Result_SubCategory + `"
-  		},
-  		"provider_data": {
-    		"response_code": "` + data_ProviderData_ResponseCode + `"
-  		},
-		"reconciliation_id": "` + data_ReconciliationID + `",
-		"amount": ` + data_Amount + `,
-		"currency": "` + data_Currency + `"
-	}
-}`
+		"id": "` + id + `",
+		"created": "` + created + `",
+		"account_id": "` + accountID + `",
+		"app_id": "` + appID + `",
+		"payment_id": "` + paymentID + `",
+		"data": {
+			"id": "` + data_ID + `",
+			"result": {
+				"status": "` + data_Result_Status + `",
+				"category": "` + data_Result_Category + `",
+				"sub_category": "` + data_Result_SubCategory + `"
+			},
+			"provider_data": {
+				"response_code": "` + data_ProviderData_ResponseCode + `"
+			},
+			"reconciliation_id": "` + data_ReconciliationID + `",
+			"amount": ` + data_Amount + `,
+			"currency": "` + data_Currency + `"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", eventType)
 
@@ -537,23 +529,23 @@ func TestCalculateWebhookSignature_MissingFields(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{appID: []byte(privateKey)}
 
 	body := `{
-	"id": "` + id + `",
-    "created": "` + created + `",
-    "account_id": "` + accountID + `",
-    "app_id": "` + appID + `",
-    "payment_id": "` + paymentID + `",
-	"data": {
-		"id": "` + data_ID + `",
-  		"result": {
-			"status": "` + data_Result_Status + `",
-    		"category": ""
-  		},
-  		"provider_data": {
-    		"response_code": "` + data_ProviderData_ResponseCode + `"
-  		},
-		"reconciliation_id": "` + data_ReconciliationID + `"
-	}
-}`
+		"id": "` + id + `",
+		"created": "` + created + `",
+		"account_id": "` + accountID + `",
+		"app_id": "` + appID + `",
+		"payment_id": "` + paymentID + `",
+		"data": {
+			"id": "` + data_ID + `",
+			"result": {
+				"status": "` + data_Result_Status + `",
+				"category": ""
+			},
+			"provider_data": {
+				"response_code": "` + data_ProviderData_ResponseCode + `"
+			},
+			"reconciliation_id": "` + data_ReconciliationID + `"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", eventType)
 
@@ -584,25 +576,25 @@ func TestCalculateWebhookSignature_NoAmount(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"test-app-id": []byte("test-private-key")}
 
 	body := `{
-	"id": "test-id",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "test-account-id",
-    "app_id": "test-app-id",
-    "payment_id": "test-payment-id",
-	"data": {
-		"id": "test-transaction-id",
-  		"result": {
-			"status": "Pending",
-    		"category": "payment_method_declined",
-    		"sub_category": "declined_by_issuing_bank"
-  		},
-  		"provider_data": {
-    		"response_code": "124"
-  		},
-		"reconciliation_id": "test-reconciliation-id",
-		"currency": "RUB"
-	}
-}`
+		"id": "test-id",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "test-account-id",
+		"app_id": "test-app-id",
+		"payment_id": "test-payment-id",
+		"data": {
+			"id": "test-transaction-id",
+			"result": {
+				"status": "Pending",
+				"category": "payment_method_declined",
+				"sub_category": "declined_by_issuing_bank"
+			},
+			"provider_data": {
+				"response_code": "124"
+			},
+			"reconciliation_id": "test-reconciliation-id",
+			"currency": "RUB"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.void.create")
 
@@ -618,26 +610,26 @@ func TestCalculateWebhookSignature_ZeroAmount(t *testing.T) {
 	})
 
 	body := `{
-	"id": "test-id",
-    "created": "2018-10-03T05:14:17.196Z",
-    "account_id": "test-account-id",
-    "app_id": "test-app-id",
-    "payment_id": "test-app-id",
-	"data": {
-		"id": "test-transaction-id",
-  		"result": {
-			"status": "Pending",
-    		"category": "payment_method_declined",
-    		"sub_category": "declined_by_issuing_bank"
-  		},
-  		"provider_data": {
-    		"response_code": "124"
-  		},
-		"reconciliation_id": "test-reconciliation-id",
-		"amount": 0,
-		"currency": "RUB"
-	}
-}`
+		"id": "test-id",
+		"created": "2018-10-03T05:14:17.196Z",
+		"account_id": "test-account-id",
+		"app_id": "test-app-id",
+		"payment_id": "test-app-id",
+		"data": {
+			"id": "test-transaction-id",
+			"result": {
+				"status": "Pending",
+				"category": "payment_method_declined",
+				"sub_category": "declined_by_issuing_bank"
+			},
+			"provider_data": {
+				"response_code": "124"
+			},
+			"reconciliation_id": "test-reconciliation-id",
+			"amount": 0,
+			"currency": "RUB"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.authorization.create")
 
@@ -651,17 +643,17 @@ func TestCalculateWebhookSignature_Payment(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"com.gojuno.gett_development": []byte("test-private-key")}
 
 	body := `{
-	"id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f-2020-11-06T14:33:46.150Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
-    "created": "2020-11-06T14:33:46.150Z",
-    "account_id": "2058ac1f-ca4b-497f-8181-341e0eea5392",
-    "app_id": "com.gojuno.gett_development",
-	"payment_id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f",
-	"data": {
-		"id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f",
-		"amount": 100,
-		"currency": "RUB"
-	}
-}`
+		"id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f-2020-11-06T14:33:46.150Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
+		"created": "2020-11-06T14:33:46.150Z",
+		"account_id": "2058ac1f-ca4b-497f-8181-341e0eea5392",
+		"app_id": "com.gojuno.gett_development",
+		"payment_id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f",
+		"data": {
+			"id": "150f1279-6d2c-4728-9e23-6b303f3f1f2f",
+			"amount": 100,
+			"currency": "RUB"
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.payment.create")
 
@@ -675,21 +667,21 @@ func TestCalculateWebhookSignature_Void(t *testing.T) {
 	keyProvider := zooz.FixedPrivateKeyProvider{"com.gojuno.gett_development": []byte("test-private-key")}
 
 	body := `{
-	"id": "83bc25f0-1710-4ea7-b610-8028f4de6d63-2020-11-06T21:09:22.356Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
-    "created": "2020-11-06T21:09:22.356Z",
-    "account_id": "2058ac1f-ca4b-497f-8181-341e0eea5392",
-    "app_id": "com.gojuno.gett_development",
-	"payment_id": "83bc25f0-1710-4ea7-b610-8028f4de6d63",
-	"data": {
-		"id": "c5f5ade4-674f-481e-a119-5827a095d352",
-		"result": {
-			"status": "Succeed"
-		},
-  		"provider_data": {
-    		"response_code": "0"
-  		}
-	}
-}`
+		"id": "83bc25f0-1710-4ea7-b610-8028f4de6d63-2020-11-06T21:09:22.356Z-fe14a744-ade7-4a15-8df4-a0b12ac11590",
+		"created": "2020-11-06T21:09:22.356Z",
+		"account_id": "2058ac1f-ca4b-497f-8181-341e0eea5392",
+		"app_id": "com.gojuno.gett_development",
+		"payment_id": "83bc25f0-1710-4ea7-b610-8028f4de6d63",
+		"data": {
+			"id": "c5f5ade4-674f-481e-a119-5827a095d352",
+			"result": {
+				"status": "Succeed"
+			},
+			"provider_data": {
+				"response_code": "0"
+			}
+		}
+	}`
 	h := http.Header{}
 	h.Set("event-type", "payment.void.create")
 

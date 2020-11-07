@@ -94,13 +94,23 @@ func (e ErrBadRequest) Unwrap() error { return e.Err }
 // reqBody should be a raw webhook http request body.
 // reqHeader should be webhook http request headers.
 //
+// Use type switch to determine concrete callback entity.
+// Returned callback entity is a value, never a pointer (i.e. AuthorizationCallback, not *AuthorizationCallback).
+//
+//  cb, _ := DecodeWebhookRequest(...)
+//  switch cb := cb.(type) {
+//    case zooz.AuthorizationCallback:
+//	  case zooz.CaptureCallback:
+//	  ...
+//  }
+//
 // Will return ErrBadRequest if the error is permanent and request should not be retried.
 // Bear in mind that your webhook handler should respond with 2xx status code anyway, otherwise PaymentsOS will continue
 // resending this request.
 // ErrBadRequest errors include:
-// 	* wrong body format (broken/invalid json, ...)
+//  * wrong body format (broken/invalid json, ...)
 //  * validation error (missing required fields or headers, unexpected values)
-// 	* unknown business unit (app_id)
+//  * unknown business unit (app_id)
 //  * incorrect request signature
 func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, keyProvider privateKeyProvider) (Callback, error) {
 	// Validate request signature
@@ -120,7 +130,7 @@ func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, 
 		XZoozRequestID: header.Get("x-zooz-request-id"),
 	}
 	var cbRef Callback
-	switch true {
+	switch {
 	case strings.HasPrefix(eventType, "payment.payment."):
 		cbRef = &PaymentCallback{CallbackCommon: common}
 	case strings.HasPrefix(eventType, "payment.authorization."):
@@ -141,7 +151,14 @@ func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, 
 	return deref(cbRef), nil
 }
 
-// Calculate webhook request signature (without "sig1=" prefix).
+// CalculateWebhookSignature calculates signature for webhook request (without "sig1=" prefix).
+// Generally, you would compare it to "signature" request header sent by PaymentsOS:
+//
+//  signature, _ := CalculateWebhookSignature(...)
+//  if "sig1=" + signature == r.Header.Get("signature") {
+//    // webhook request is valid
+//  }
+//
 // reqBody should be a raw webhook http request body.
 // reqHeader should be webhook http request headers (currently only 'event-type' header matters).
 // Will return ErrBadRequest{} if error is permanent and should not be retried (malformed json body, unknown app_id)
@@ -178,7 +195,7 @@ func CalculateWebhookSignature(ctx context.Context, reqBody []byte, reqHeader ht
 	if err != nil {
 		return "", errors.Wrap(err, "select private key by app_id")
 	}
-	if key == nil {
+	if len(key) == 0 {
 		return "", ErrBadRequest{errors.Errorf("unknown app_id %q", f.AppID)}
 	}
 
