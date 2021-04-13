@@ -8,6 +8,11 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// Maxium level of quoting
+const (
+	maxCitationLevel = 10
+)
+
 // Result represents status and category of some methods response.
 type Result struct {
 	Status      string `json:"status"`
@@ -125,17 +130,22 @@ type DecodedJSON map[string]interface{}
 
 func (d *DecodedJSON) UnmarshalJSON(data []byte) error {
 	var (
-		err          error
-		unquotedData string
-		rawSet       = make(map[string]json.RawMessage)
+		err           error
+		unquotedData  string
+		rawSet        = make(map[string]json.RawMessage)
+		citationLevel = 0
 	)
 
 	unquotedData, err = strconv.Unquote(string(data))
 	// Error can be returned if it's not quoted string
 	if err != nil {
-		// There are not a quoted data, trying to unmarshal
+		// There are not quoted data, trying to unmarshal
 		err = json.Unmarshal(data, &rawSet)
 	} else {
+		for err == nil && citationLevel < maxCitationLevel {
+			unquotedData, err = strconv.Unquote(string(data))
+			citationLevel++
+		}
 		err = json.Unmarshal([]byte(unquotedData), &rawSet)
 	}
 	if err != nil {
