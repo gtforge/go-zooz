@@ -25,7 +25,7 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 			`),
 			expectedRes: zooz.DecodedJSON{
 				"a": zooz.DecodedJSON{
-					"b": json.RawMessage("1"),
+					"b": float64(1),
 				},
 			},
 		},
@@ -42,7 +42,7 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 			expectedRes: zooz.DecodedJSON{
 				"c": zooz.DecodedJSON{
 					"b": zooz.DecodedJSON{
-						"a": json.RawMessage("1"),
+						"a": float64(1),
 					},
 				},
 			},
@@ -57,7 +57,7 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 					"b": zooz.DecodedJSON{
 						"c": zooz.DecodedJSON{
 							"e": zooz.DecodedJSON{
-								"a": json.RawMessage("1"),
+								"a": float64(1),
 							},
 						},
 					},
@@ -68,7 +68,7 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 							"b": zooz.DecodedJSON{
 								"c": zooz.DecodedJSON{
 									"e": zooz.DecodedJSON{
-										"a": json.RawMessage("1"),
+										"a": float64(1),
 									},
 								},
 							},
@@ -86,10 +86,42 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 				"b": zooz.DecodedJSON{
 					"c": zooz.DecodedJSON{
 						"e": zooz.DecodedJSON{
-							"a": json.RawMessage("1"),
+							"a": float64(1),
 						},
 					},
 				},
+			},
+		},
+		{
+			name: "when json contains quoted array",
+			incomingData: []byte(`
+			{"c":{"b":[2,3,4,5]}}
+			`),
+			expectedRes: zooz.DecodedJSON{
+				"c": zooz.DecodedJSON{
+					"b": []interface{}{
+						float64(2),
+						float64(3),
+						float64(4),
+						float64(5),
+					},
+				},
+			},
+		},
+		{
+			name: "more different types in JSON",
+			incomingData: []byte(`
+			{"a":1,"b":"2021-04-14 18:32:30 +0300","c":12.12,"d":["foo"],"e":{"k":1},"foo":"asd"}
+			`),
+			expectedRes: zooz.DecodedJSON{
+				"a": float64(1),
+				"b": "2021-04-14 18:32:30 +0300",
+				"c": float64(12.12),
+				"d": []interface{}{"foo"},
+				"e": zooz.DecodedJSON{
+					"k": float64(1),
+				},
+				"foo": "asd",
 			},
 		},
 	}

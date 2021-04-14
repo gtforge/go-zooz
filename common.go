@@ -164,7 +164,15 @@ func (d *DecodedJSON) UnmarshalJSON(data []byte) error {
 		// Trying to unmarshal the value because it can contain another JSON object
 		err = json.Unmarshal(v, &dValue)
 		if err != nil {
-			(*d)[k] = v
+			var unmarshaledValue interface{}
+			// Trying to unmarshal value as is
+			err = json.Unmarshal(v, &unmarshaledValue)
+			// If unsuccessfull then we set the raw value
+			if err != nil {
+				(*d)[k] = v
+			} else { // set unmarshaled data
+				(*d)[k] = unmarshaledValue
+			}
 			continue
 		}
 		(*d)[k] = dValue
