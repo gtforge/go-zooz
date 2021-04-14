@@ -28,8 +28,8 @@ type Authorization struct {
 	OriginatingPurchaseCountry string                  `json:"originating_purchase_country"`
 	IPAddress                  string                  `json:"ip_address"`
 	Redirection                *Redirection            `json:"redirection"`
-	AdditionalDetails          AdditionalDetails       `json:"additional_details,omitempty"`
-	DecisionEngineExecution    DecisionEngineExecution `json:"decision_engine_execution,omitempty"`
+	AdditionalDetails          AdditionalDetails       `json:"additional_details"`
+	DecisionEngineExecution    DecisionEngineExecution `json:"decision_engine_execution"`
 }
 
 // AuthorizationParams is a set of params for creating entity.

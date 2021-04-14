@@ -21,9 +21,9 @@ type Capture struct {
 	Created               json.Number           `json:"created"`
 	ProviderData          ProviderData          `json:"provider_data"`
 	ProviderSpecificData  DecodedJSON           `json:"provider_specific_data"`
-	Level23               Level23               `json:"level_2_3,omitempty"`
-	ProviderConfiguration ProviderConfiguration `json:"provider_configuration,omitempty"`
-	AdditionalDetails     AdditionalDetails     `json:"additional_details,omitempty"`
+	Level23               Level23               `json:"level_2_3"`
+	ProviderConfiguration ProviderConfiguration `json:"provider_configuration"`
+	AdditionalDetails     AdditionalDetails     `json:"additional_details"`
 }
 
 // CaptureParams is a set of params for creating entity.
