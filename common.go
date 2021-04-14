@@ -8,9 +8,9 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// Maxium level of quoting
+// Maxium level of citiation
 const (
-	maxCitationLevel = 10
+	maxCitationLevel = 1000
 )
 
 // Result represents status and category of some methods response.
@@ -128,6 +128,7 @@ type Order struct {
 
 type DecodedJSON map[string]interface{}
 
+// UnmarshalJSON is called when the function json.Unmarshal is called.
 func (d *DecodedJSON) UnmarshalJSON(data []byte) error {
 	var (
 		err           error
@@ -142,8 +143,14 @@ func (d *DecodedJSON) UnmarshalJSON(data []byte) error {
 		// There are not quoted data, trying to unmarshal
 		err = json.Unmarshal(data, &rawSet)
 	} else {
+		// Save iteraction result separatly because it can be nil
+		var iterationUnquotedData string
 		for err == nil && citationLevel < maxCitationLevel {
-			unquotedData, err = strconv.Unquote(string(data))
+			iterationUnquotedData, err = strconv.Unquote(string(unquotedData))
+			// Save the last successful result
+			if err == nil {
+				unquotedData = iterationUnquotedData
+			}
 			citationLevel++
 		}
 		err = json.Unmarshal([]byte(unquotedData), &rawSet)
@@ -154,6 +161,7 @@ func (d *DecodedJSON) UnmarshalJSON(data []byte) error {
 	*d = make(map[string]interface{})
 	for k, v := range rawSet {
 		dValue := make(DecodedJSON)
+		// Trying to unmarshal the value because it can contain another JSON object
 		err = json.Unmarshal(v, &dValue)
 		if err != nil {
 			(*d)[k] = v

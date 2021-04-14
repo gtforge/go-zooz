@@ -1,7 +1,6 @@
 package zooz_test
 
 import (
-	"bytes"
 	"encoding/json"
 	"testing"
 
@@ -51,23 +50,35 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 		{
 			name: "more more complicated json",
 			incomingData: []byte(`
-			"{\"c\":\"{\\\"b\\\":\\\"{\\\\\\\"a\\\\\\\":1}\\\"}\",\"d\":{\"a\":{\"1\":\"\\\"\\\\\\\"\\\\\\\\\\\\\\\"{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\":1}\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}\\\\\\\\\\\\\\\"\\\\\\\"\\\"\"}}}"
+			"{\"c\":{\"b\":{\"c\":{\"e\":{\"a\":1}}}},\"d\":{\"a\":{\"1\":\"\\\"\\\\\\\"{\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\":{\\\\\\\\\\\\\\\"c\\\\\\\\\\\\\\\":{\\\\\\\\\\\\\\\"e\\\\\\\\\\\\\\\":{\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\":1}}}}\\\\\\\"\\\"\"}}}"
 		`),
 			expectedRes: zooz.DecodedJSON{
 				"c": zooz.DecodedJSON{
 					"b": zooz.DecodedJSON{
-						"a": json.RawMessage("1"),
+						"c": zooz.DecodedJSON{
+							"e": zooz.DecodedJSON{
+								"a": json.RawMessage("1"),
+							},
+						},
 					},
 				},
 				"d": zooz.DecodedJSON{
 					"a": zooz.DecodedJSON{
-						"1": json.RawMessage(`"\"\\\"\\\\\\\"{\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\":1}\\\\\\\\\\\\\\\"}\\\\\\\"\\\"\""`),
+						"1": zooz.DecodedJSON{
+							"b": zooz.DecodedJSON{
+								"c": zooz.DecodedJSON{
+									"e": zooz.DecodedJSON{
+										"a": json.RawMessage("1"),
+									},
+								},
+							},
+						},
 					},
 				},
 			},
 		},
 		{
-			name: "dont' need to unquote string",
+			name: "do not need to unquote string",
 			incomingData: []byte(`
 			{"b":{"c":{"e":{"a":1}}}}
 			`),
@@ -92,13 +103,6 @@ func TestDecodeJSON__UnmarshalJSON(t *testing.T) {
 				assert.EqualError(t, err, tC.expectedErr.Error())
 				return
 			}
-
-			marshaledData, err := json.Marshal(res)
-			assert.NoError(t, err)
-			var prettyJSON bytes.Buffer
-			err = json.Indent(&prettyJSON, marshaledData, "", "\t")
-			assert.NoError(t, err)
-			t.Log(prettyJSON.String())
 			assert.Equal(t, tC.expectedRes, res)
 		})
 	}
