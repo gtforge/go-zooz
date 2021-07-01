@@ -15,8 +15,8 @@ type httpClientMock struct {
 	t *testing.T
 
 	expectedMethod   string
-	expectedURL      string // can be relative i.e. "/somepath?k=v", in this case will be prepended with ApiURL
-	expectedHeaders  map[string]string
+	expectedURL      string            // can be relative i.e. "/somepath?k=v", in this case will be prepended with ApiURL
+	expectedHeaders  map[string]string // headers expected to be included in request
 	expectedBodyJSON string
 
 	responseCode int
@@ -121,9 +121,11 @@ func TestCall_WithApiResponse(t *testing.T) {
 		expectedURL:    "http://xxx.com/somepath?testk=testv",
 
 		expectedHeaders: map[string]string{
-			headerEnv:        string(EnvTest),
+			headerAPIVersion: "1.2.0",
+			headerEnv:        "test",
 			headerAppID:      "app_id_test",
 			headerPrivateKey: "private_key_test",
+			"Content-Type":   "application/json",
 			"test-header":    "test-header-value",
 		},
 
