@@ -45,7 +45,7 @@ func (c *httpClientMock) Do(r *http.Request) (*http.Response, error) {
 	if c.expectedBodyJSON != "" {
 		require.JSONEq(c.t, c.expectedBodyJSON, string(body))
 	} else {
-		require.Equal(c.t, "", string(body))
+		require.Empty(c.t, body)
 	}
 
 	if c.error != nil {
