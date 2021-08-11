@@ -20,7 +20,7 @@ type Authorization struct {
 	Created                    json.Number             `json:"created"`
 	ReconciliationID           string                  `json:"reconciliation_id"`
 	PaymentMethod              PaymentMethod           `json:"payment_method"`
-	ThreeDSecureAttributes     *ThreeDSecureAttributes `json:"three_d_secure_attributes"`
+	ThreeDSecureAttributes     *ThreeDSecure13Attributes `json:"three_d_secure_attributes"`
 	Installments               *Installments           `json:"installments"`
 	ProviderData               ProviderData            `json:"provider_data"`
 	ProviderSpecificData       DecodedJSON             `json:"provider_specific_data"`
@@ -37,7 +37,7 @@ type AuthorizationParams struct {
 	PaymentMethod            PaymentMethodDetails      `json:"payment_method"`
 	MerchantSiteURL          string                    `json:"merchant_site_url,omitempty"`
 	ReconciliationID         string                    `json:"reconciliation_id,omitempty"`
-	ThreeDSecureAttributes   *ThreeDSecureAttributes   `json:"three_d_secure_attributes,omitempty"`
+	ThreeDSecureAttributes   *ThreeDSecure13Attributes   `json:"three_d_secure_attributes,omitempty"`
 	Installments             *Installments             `json:"installments,omitempty"`
 	ProviderSpecificData     map[string]interface{}    `json:"provider_specific_data,omitempty"`
 	AdditionalDetails        map[string]string         `json:"additional_details,omitempty"`
