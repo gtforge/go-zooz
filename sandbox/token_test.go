@@ -54,7 +54,7 @@ func TestToken(t *testing.T) {
 			CreditCardCVV: "123",
 		})
 		require.NoError(t, err)
-		softAssert(t, func() {
+		must(t, func() {
 			assert.NotEmpty(t, tokenCreated.Token)
 			assert.NotEmpty(t, tokenCreated.Created)
 			assert.NotEmpty(t, tokenCreated.EncryptedCVV)
@@ -77,7 +77,7 @@ func TestToken(t *testing.T) {
 
 		tokenRetrieved, err := client.CreditCardToken().Get(context.Background(), tokenCreated.Token)
 		require.NoError(t, err)
-		softAssert(t, func() {
+		must(t, func() {
 			assert.Empty(t, tokenRetrieved.EncryptedCVV) // encrypted CVV returned only once
 			tokenRetrieved.EncryptedCVV = tokenCreated.EncryptedCVV
 			assert.Equal(t, tokenCreated, tokenRetrieved)
@@ -96,7 +96,7 @@ func TestToken(t *testing.T) {
 			CreditCardCVV:     "",
 		})
 		require.NoError(t, err)
-		softAssert(t, func() {
+		must(t, func() {
 			assert.NotEmpty(t, tokenCreated.Token)
 			assert.NotEmpty(t, tokenCreated.Created)
 			assert.Equal(t, &zooz.CreditCardToken{
