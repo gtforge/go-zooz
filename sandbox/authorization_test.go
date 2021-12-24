@@ -48,7 +48,7 @@ func TestAuthorization(t *testing.T) {
 					"auth detail 2": "value 2",
 				},
 				COFTransactionIndicators: &zooz.COFTransactionIndicators{
-					CardEntryMode:           "consent_transaction",
+					CardEntryMode:           "cof_merchant_initiated_transaction",
 					COFConsentTransactionID: "",
 				},
 			},
@@ -129,7 +129,7 @@ func TestAuthorization(t *testing.T) {
 					NetworkTransactionID:  "",
 				},
 				COFTransactionIndicators: zooz.COFTransactionIndicators{
-					CardEntryMode:           "consent_transaction",
+					CardEntryMode:           "cof_merchant_initiated_transaction",
 					COFConsentTransactionID: "",
 				},
 				ProviderSpecificData:       zooz.DecodedJSON{},                         // why empty?
