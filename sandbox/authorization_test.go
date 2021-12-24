@@ -67,6 +67,7 @@ func TestAuthorization(t *testing.T) {
 			assert.NotEmpty(t, authorizationCreated.ProviderData.TransactionID)
 			assert.NotEmpty(t, authorizationCreated.ProviderData.ExternalID)
 			assert.NotEmpty(t, authorizationCreated.ProviderConfiguration)
+			assert.NotEmpty(t, authorizationCreated.COFTransactionIndicators)
 			assert.Equal(t, &zooz.Authorization{
 				ID: authorizationCreated.ID, // ignore
 				Result: zooz.Result{
@@ -126,6 +127,10 @@ func TestAuthorization(t *testing.T) {
 					Documents:             nil,
 					AdditionalInformation: nil,
 					NetworkTransactionID:  "",
+				},
+				COFTransactionIndicators: zooz.COFTransactionIndicators{
+					CardEntryMode:           "consent_transaction",
+					COFConsentTransactionID: "",
 				},
 				ProviderSpecificData:       zooz.DecodedJSON{},                         // why empty?
 				ProviderConfiguration:      authorizationCreated.ProviderConfiguration, // ignore

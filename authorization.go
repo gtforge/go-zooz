@@ -15,22 +15,23 @@ type AuthorizationClient struct {
 
 // Authorization is a model of entity.
 type Authorization struct {
-	ID                         string                  `json:"id"`
-	Result                     Result                  `json:"result"`
-	Amount                     int64                   `json:"amount"`
-	Created                    json.Number             `json:"created"`
-	ReconciliationID           string                  `json:"reconciliation_id"`
-	PaymentMethod              PaymentMethod           `json:"payment_method"`
-	ThreeDSecureAttributes     *ThreeDSecureAttributes `json:"three_d_secure_attributes"`
-	Installments               *Installments           `json:"installments"`
-	ProviderData               ProviderData            `json:"provider_data"`
-	ProviderSpecificData       DecodedJSON             `json:"provider_specific_data"`
-	ProviderConfiguration      ProviderConfiguration   `json:"provider_configuration"`
-	OriginatingPurchaseCountry string                  `json:"originating_purchase_country"`
-	IPAddress                  string                  `json:"ip_address"`
-	Redirection                *Redirection            `json:"redirection"`
-	AdditionalDetails          AdditionalDetails       `json:"additional_details"`
-	DecisionEngineExecution    DecisionEngineExecution `json:"decision_engine_execution"`
+	ID                         string                   `json:"id"`
+	Result                     Result                   `json:"result"`
+	Amount                     int64                    `json:"amount"`
+	Created                    json.Number              `json:"created"`
+	ReconciliationID           string                   `json:"reconciliation_id"`
+	PaymentMethod              PaymentMethod            `json:"payment_method"`
+	ThreeDSecureAttributes     *ThreeDSecureAttributes  `json:"three_d_secure_attributes"`
+	Installments               *Installments            `json:"installments"`
+	ProviderData               ProviderData             `json:"provider_data"`
+	ProviderSpecificData       DecodedJSON              `json:"provider_specific_data"`
+	ProviderConfiguration      ProviderConfiguration    `json:"provider_configuration"`
+	OriginatingPurchaseCountry string                   `json:"originating_purchase_country"`
+	IPAddress                  string                   `json:"ip_address"`
+	Redirection                *Redirection             `json:"redirection"`
+	AdditionalDetails          AdditionalDetails        `json:"additional_details"`
+	DecisionEngineExecution    DecisionEngineExecution  `json:"decision_engine_execution"`
+	COFTransactionIndicators   COFTransactionIndicators `json:"cof_transaction_indicators"`
 }
 
 // AuthorizationParams is a set of params for creating entity.
