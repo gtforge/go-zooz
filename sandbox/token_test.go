@@ -2,11 +2,12 @@ package sandbox
 
 import (
 	"context"
+	"net/http"
+	"testing"
+
 	"github.com/gtforge/go-zooz"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"net/http"
-	"testing"
 )
 
 func TestToken(t *testing.T) {
@@ -71,6 +72,8 @@ func TestToken(t *testing.T) {
 				CardType:           "CREDIT",
 				Level:              "CORPORATE",
 				CountryCode:        "USA",
+				HolderName:         "holder name",
+				ExpirationDate:     "12/2051",
 				Token:              tokenCreated.Token,
 				Created:            tokenCreated.Created,
 				Type:               "tokenized",
@@ -114,6 +117,8 @@ func TestToken(t *testing.T) {
 				CardType:           "CREDIT",
 				Level:              "INFINITE",
 				CountryCode:        "UKR",
+				HolderName:         "holder name",
+				ExpirationDate:     "",
 				Token:              tokenCreated.Token,
 				Created:            tokenCreated.Created,
 				Type:               "tokenized",
