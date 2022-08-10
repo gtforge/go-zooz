@@ -73,7 +73,7 @@ func TestToken(t *testing.T) {
 				Level:              "CORPORATE",
 				CountryCode:        "USA",
 				HolderName:         "holder name",
-				ExpirationDate:     "12/2051",
+				ExpirationDate:     tokenCreated.ExpirationDate,
 				Token:              tokenCreated.Token,
 				Created:            tokenCreated.Created,
 				Type:               "tokenized",
@@ -95,7 +95,7 @@ func TestToken(t *testing.T) {
 
 		tokenCreated, err := client.CreditCardToken().New(context.Background(), randomString(32), &zooz.CreditCardTokenParams{
 			HolderName:        "holder name",
-			ExpirationDate:    "", // cool, it is not required
+			ExpirationDate:    "", // looks like it is not required
 			IdentityDocument:  nil,
 			CardNumber:        "4012888888881881",
 			ShippingAddress:   nil,

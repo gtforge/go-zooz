@@ -55,10 +55,8 @@ type CreditCardToken struct {
 	// HolderName - Name of the credit card holder.
 	HolderName string `json:"holder_name"`
 
-	// ExpirationDate - ^(0[1-9]|1[0-2])(\/|\-|\.| )\d{2,4} Credit card expiration date.
-	// Possible formats: mm-yyyy, mm-yy, mm.yyyy, mm.yy, mm/yy, mm/yyyy, mm yyyy, or mm yy.
-	// (Ivan: seems it is always normalized to mm/yyyy when returned)
-	ExpirationDate string `json:"expiration_date"`
+	// Credit card expiration date.
+	ExpirationDate ExpirationDate `json:"expiration_date"`
 
 	// Token - Depending on the `token_type`, the token represents one of the following:
 	// a customer's credit card number, the card cvv code or a billing agreement.
