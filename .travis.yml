@@ -1,11 +1,12 @@
 language: go
-
 go:
-  - stable
-
+  - "1.19"
 install:
-  - go get github.com/pkg/errors
-  - go get github.com/stretchr/testify/require
-
 script:
   - cd $TRAVIS_BUILD_DIR && PAYMENTSOS_SANDBOX_TEST=1 go test ./...
+branches:
+  only:
+    - master
+env:
+  global:
+    - GOPRIVATE=github.com/gtforge

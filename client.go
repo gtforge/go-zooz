@@ -10,7 +10,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 
@@ -178,7 +177,7 @@ func (c *Client) Call(ctx context.Context, method, path string, headers map[stri
 
 	// Handle 4xx and 5xx statuses
 	if resp.StatusCode >= http.StatusBadRequest {
-		respBody, err := ioutil.ReadAll(resp.Body)
+		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return errors.Wrap(err, "failed to read response body")
 		}
@@ -195,7 +194,7 @@ func (c *Client) Call(ctx context.Context, method, path string, headers map[stri
 
 	// Decode response into a struct if it was given
 	if respObj != nil {
-		respBody, err := ioutil.ReadAll(resp.Body)
+		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return errors.Wrap(err, "failed to read response body")
 		}

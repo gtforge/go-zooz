@@ -3,7 +3,7 @@ package zooz
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -38,7 +38,7 @@ func (c *httpClientMock) Do(r *http.Request) (*http.Response, error) {
 	var body []byte
 	if r.Body != nil {
 		var err error
-		body, err = ioutil.ReadAll(r.Body)
+		body, err = io.ReadAll(r.Body)
 		require.NoError(c.t, err)
 		defer func() { _ = r.Body.Close() }()
 	}
@@ -54,7 +54,7 @@ func (c *httpClientMock) Do(r *http.Request) (*http.Response, error) {
 
 	return &http.Response{
 		StatusCode: c.responseCode,
-		Body:       ioutil.NopCloser(bytes.NewBufferString(c.responseBody)),
+		Body:       io.NopCloser(bytes.NewBufferString(c.responseBody)),
 	}, nil
 }
 

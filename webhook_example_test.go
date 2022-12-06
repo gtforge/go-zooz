@@ -2,7 +2,7 @@ package zooz_test
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gtforge/go-zooz"
@@ -13,7 +13,7 @@ func ExampleDecodeWebhookRequest() {
 	keyProvider := zooz.FixedPrivateKeyProvider{"app-id": []byte("my-private-key")}
 
 	_ = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 		cb, err := zooz.DecodeWebhookRequest(r.Context(), body, r.Header, keyProvider)
 		if err != nil {
 			if errors.As(err, &zooz.ErrBadRequest{}) {
@@ -41,7 +41,7 @@ func ExampleCalculateWebhookSignature() {
 	keyProvider := zooz.FixedPrivateKeyProvider{"app-id": []byte("my-private-key")}
 
 	_ = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		body, _ := ioutil.ReadAll(r.Body)
+		body, _ := io.ReadAll(r.Body)
 		signature, _ := zooz.CalculateWebhookSignature(r.Context(), body, r.Header, keyProvider)
 		if "sig1="+signature == r.Header.Get("signature") {
 			fmt.Print("Request signature is valid")

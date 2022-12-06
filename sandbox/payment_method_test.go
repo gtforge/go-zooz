@@ -3,11 +3,12 @@ package sandbox
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"testing"
+
 	"github.com/gtforge/go-zooz"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"net/http"
-	"testing"
 )
 
 func TestPaymentMethod(t *testing.T) {

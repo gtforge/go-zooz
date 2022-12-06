@@ -2,9 +2,6 @@ package sandbox
 
 import (
 	"fmt"
-	"github.com/gtforge/go-zooz"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"io"
 	"math/rand"
 	"net/http"
@@ -14,6 +11,10 @@ import (
 	"testing"
 	"text/template"
 	"time"
+
+	"github.com/gtforge/go-zooz"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -191,15 +192,17 @@ func randChar() byte {
 
 // must is a helper function to implement soft assertions from Java world.
 // The idea is to do several assertions at once:
-//  * All assertions inside do func will be executed no matter what.
-//  * But the test will be stopped just after if any of them failed.
+//   - All assertions inside do func will be executed no matter what.
+//   - But the test will be stopped just after if any of them failed.
+//
 // Note: Do not use require package in do func, use assert package instead.
 // Example:
-// 	must(t, func() {
-// 		assert.Equal(t, ...)
-// 		assert.Equal(t, ...)
-// 		assert.Equal(t, ...)
-// 	})
+//
+//	must(t, func() {
+//		assert.Equal(t, ...)
+//		assert.Equal(t, ...)
+//		assert.Equal(t, ...)
+//	})
 func must(t *testing.T, do func()) {
 	do()
 	if t.Failed() {

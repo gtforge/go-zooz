@@ -97,21 +97,21 @@ func (e ErrBadRequest) Unwrap() error { return e.Err }
 // Use type switch to determine concrete callback entity.
 // Returned callback entity is a value, never a pointer (i.e. AuthorizationCallback, not *AuthorizationCallback).
 //
-//  cb, _ := DecodeWebhookRequest(...)
-//  switch cb := cb.(type) {
-//    case zooz.AuthorizationCallback:
-//	  case zooz.CaptureCallback:
-//	  ...
-//  }
+//	 cb, _ := DecodeWebhookRequest(...)
+//	 switch cb := cb.(type) {
+//	   case zooz.AuthorizationCallback:
+//		  case zooz.CaptureCallback:
+//		  ...
+//	 }
 //
 // Will return ErrBadRequest if the error is permanent and request should not be retried.
 // Bear in mind that your webhook handler should respond with 2xx status code anyway, otherwise PaymentsOS will continue
 // resending this request.
 // ErrBadRequest errors include:
-//  * wrong body format (broken/invalid json, ...)
-//  * validation error (missing required fields or headers, unexpected values)
-//  * unknown business unit (app_id)
-//  * incorrect request signature
+//   - wrong body format (broken/invalid json, ...)
+//   - validation error (missing required fields or headers, unexpected values)
+//   - unknown business unit (app_id)
+//   - incorrect request signature
 func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, keyProvider privateKeyProvider) (Callback, error) {
 	// Validate request signature
 	signature, err := CalculateWebhookSignature(ctx, body, header, keyProvider)
@@ -154,10 +154,10 @@ func DecodeWebhookRequest(ctx context.Context, body []byte, header http.Header, 
 // CalculateWebhookSignature calculates signature for webhook request (without "sig1=" prefix).
 // Generally, you would compare it to "signature" request header sent by PaymentsOS:
 //
-//  signature, _ := CalculateWebhookSignature(...)
-//  if "sig1=" + signature == r.Header.Get("signature") {
-//    // webhook request is valid
-//  }
+//	signature, _ := CalculateWebhookSignature(...)
+//	if "sig1=" + signature == r.Header.Get("signature") {
+//	  // webhook request is valid
+//	}
 //
 // reqBody should be a raw webhook http request body.
 // reqHeader should be webhook http request headers (currently only 'event-type' header matters).
