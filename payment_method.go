@@ -37,6 +37,7 @@ type PaymentMethod struct {
 	ShippingAddress    *Address          `json:"shipping_address"`
 	BillingAddress     *Address          `json:"billing_address"`
 	FingerPrint        string            `json:"fingerprint"`
+	State              string            `json:"state"`
 }
 
 // ExpirationDate is credit card expiration date.
